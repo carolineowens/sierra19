@@ -62,7 +62,17 @@ plot3 <- ggplot(data = dat2)+
   facet_wrap(~lake + date, scales = "free")+
   theme_classic()
 
-plot3 #mg/L DO vs. depth for each profile
+plot3 #mg/L DO vs. depth for each lake
+
+#separate profiles taken on the same day at same lake 
+
+plot4 <- ggplot(data= dat2)+
+  geom_point(aes(x=z, y=pctDO))+
+  facet_wrap(~lake + lat + date, scales = "free", drop = TRUE, 
+             labeller = labeller(~lake + date, .multi_line = FALSE))+
+  theme_void()
+
+plot4
 
 ##############
 ### playing with just one sample date / lake - untangling patterns
@@ -71,18 +81,16 @@ plot3 #mg/L DO vs. depth for each profile
 dat3 <- dat2 %>% 
   filter(lake == "H2P", date == "3-Aug-19")
 
-plot4 <- ggplot(data = dat3)+
+plot5 <- ggplot(data = dat3)+
   geom_point(aes(x=z, y=pctDO))+
   facet_grid(rows=vars(lat), cols = NULL)+
   theme_classic()
 
-plot4
-
-
-plot5 <- ggplot(data= dat2)+
-  geom_point(aes(x=z, y=pctDO))+
-  facet_wrap(~lake + lat + date, scales = "free", drop = TRUE, 
-             labeller = labeller(~lake + date, .multi_line = FALSE))+
-  theme_void()
-
 plot5
+
+##############
+### now compare data at one depth across days/lakes/temps
+##############
+
+dat5 <- dat1 %>% #need to fill in temperatures before doing this
+  filter (z == 1)
